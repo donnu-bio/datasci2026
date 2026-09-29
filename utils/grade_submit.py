@@ -2,11 +2,30 @@ from notion_client import Client
 from datetime import datetime
 import os
 
-NOTION_TOKEN = "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"
-DATABASE_ID = "3dde8c45add0808b8d59e2a41ea4dc4b"
+import os
+from dotenv import load_dotenv
+
+load_dotenv()   # підхопить .env, якщо він є
+NOTION_TOKEN = os.environ.get("NOTION_TOKEN")
+DATABASE_ID = os.environ.get("DATABASE_ID_DATASCIENCE_GRADES")
+
+if not NOTION_TOKEN or not DATABASE_ID:
+    raise ValueError(
+        "NOTION_TOKEN і DATABASE_ID не знайдені. "
+        "Переконайтеся, що ви відкрили Codespace з репозиторію організації."
+    )
+
 notion = Client(auth=NOTION_TOKEN)
 
-def submit_grade(name: str, lab_name: str, grade: float, comment: str = ""):
+def submit_grade(name: str, lab_name: str, comment: str = "", results = None, show_grade: bool = True):
+
+    if not name or not lab_name or results is None:
+        raise ValueError("Ім'я, назва лабораторної роботи та оцінка обов'язкові.")
+
+    grade = results.total/results.possible*100
+    if show_grade:
+        print("Ваш результат у %:", grade)
+    
     notion.pages.create(
         parent={"database_id": DATABASE_ID},
         properties={
@@ -27,4 +46,4 @@ def submit_grade(name: str, lab_name: str, grade: float, comment: str = ""):
             },            
         }
     )
-    #print("Дані успішно відправлено в Notion!")
+    print("Дані успішно відправлено викладачу!")

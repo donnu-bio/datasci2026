@@ -1,15 +1,14 @@
 {
-  "name": "Data 8 & Otter-Grader Environment",
-  // Використовуємо офіційний, оптимізований образ від Microsoft із попередньо встановленим Python 3
-  "image": "://microsoft.com",
+  "name": "Data 8 & Otter-Grader Environment", 	
+  // Офіційний образ Microsoft з Python
+  "image": "mcr.microsoft.com/devcontainers/python:3.11-bookworm",
 
   "customizations": {
     "vscode": {
-      // Автоматично інсталюємо необхідні плагіни у VS Code студента
       "extensions": [
-        "ms-python.python",            // Підтримка мови Python
-        "ms-toolsai.jupyter",          // Інтерфейс для роботи з .ipynb записниками
-        "ms-python.vscode-pylance"     // Автодоповнення та підказки коду
+        "ms-python.python",
+        "ms-toolsai.jupyter",
+        "ms-python.vscode-pylance"
       ],
       "settings": {
         "python.defaultInterpreterPath": "/usr/local/bin/python",
@@ -18,6 +17,6 @@
     }
   },
 
-  // Автоматично встановлюємо всі бібліотеки з requirements.txt відразу після створення контейнера
+  // Встановлюємо залежності після створення контейнера
   "postCreateCommand": "pip install --no-cache-dir -r .devcontainer/requirements.txt"
 }
